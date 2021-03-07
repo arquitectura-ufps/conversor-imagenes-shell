@@ -16,6 +16,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         ImageFormat [] extenciones = ImageFormat.values();
 
+        File image;
+
         String direccion = "C:/Users/Cadm/Downloads/Nueva carpeta/harmony.jpg";
         String nuevadireccion="";
 
@@ -29,18 +31,37 @@ public class Main {
 
             System.out.println("Bienvenido ConverterUFPS");
 
-            System.out.println("Por favor ingrese la ubicacion de la imagen que desee convertir:");
 
-            direccion=sc.nextLine();
-            File image = new File(direccion);
+            while(true){
+
+                System.out.println("Por favor ingrese la ubicacion de la imagen que desee convertir:");
+
+                direccion=sc.nextLine();
+                image = new File(direccion);
+
+                if(!image.exists()){
+                    System.out.println("----HA INGRESADO UNA RUTA INVALIDA INTENTE DE NUEVO----");
+                    continue;
+                }
+                break;
+            }
+
 
             Converter converter = new ImageConverter();
             converter.source(image);
 
-            System.out.println("Ingrese la ruta donde desea guardar la imagen: ");
+            while(true) {
+                System.out.println("Ingrese la ruta donde desea guardar la imagen: ");
 
-            nuevadireccion=sc.nextLine();
+                nuevadireccion = sc.nextLine();
+                File ruta = new File(nuevadireccion);
 
+                if (!ruta.exists()) {
+                    System.out.println("----HA INGRESADO UNA RUTA INVALIDA INTENTE DE NUEVO----");
+                    continue;
+                }
+                break;
+            }
             String ext = Files.probeContentType(image.toPath()).split("/")[1];
             ext = ext.equalsIgnoreCase("jpeg") ? "JPG" : ext;
 
@@ -52,6 +73,8 @@ public class Main {
                 }
             }
 
+
+
             System.out.println("¿A que formato desea convertir la imagen?");
 
             int i=1;
@@ -60,8 +83,22 @@ public class Main {
                 i++;
             }
 
-            opcion=sc.nextInt();
+            opcion= sc.nextInt();
             sc.skip("\n");
+            while(opcion != 1 && opcion !=2 && opcion!= 3){
+                System.out.println("**** HA INGRESADO UN NUMERO INVALIDO POR FAVOR INTENTE DE NUEVO ****");
+                System.out.println("¿A que formato desea convertir la imagen?");
+
+                int j=1;
+                for(String x : valids ) {
+                    System.out.println(j+". "+x.toString());
+                    j++;
+                }
+                opcion=sc.nextInt();
+                System.out.println(""+opcion);
+                sc.skip("\n");
+            }
+
 
             converter.setFolder(nuevadireccion);
             converter.setName("imagenconvertida");
@@ -71,7 +108,7 @@ public class Main {
                 converter.defineFormat(ImageFormat.valueOf(valids.get(opcion-1).toString()));
                 run(converter);
 
-            } else if(opcion == 1) {
+            } else if(opcion == 2) {
                 converter.defineFormat(ImageFormat.valueOf(valids.get(opcion-1).toString()));
                 run(converter);
 
@@ -98,8 +135,11 @@ public class Main {
     public static void run(Converter converter) {
         try {
             File imageOut = converter.startProcess();
+
         } catch (ConverterException | ValidationException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
+
         }
     }
 }
