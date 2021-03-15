@@ -21,3 +21,4 @@ La siguiente aplicación se ejecuta en el shell o por consola, consite en buscar
 <li>La aplicacion detecta el formato que tiene la imagen </li>
 <li>Se Debe seleccionar el formato al que se desea convertir. </li>
 <li>Se muestra un mensaje de exito si la aplicacion funciono correctamente</li> 
+</ol>
